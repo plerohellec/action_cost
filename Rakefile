@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "action_cost"
   gem.homepage = "http://github.com/plerohellec/action_cost"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Measure cost of controller action}
+  gem.description = %Q{cost of controller actions}
   gem.email = "plerohellec@yammer-inc.com"
   gem.authors = ["Philippe Le Rohellec"]
   # dependencies defined in Gemfile
