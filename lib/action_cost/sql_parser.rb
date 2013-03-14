@@ -1,8 +1,8 @@
 module ActionCost
   class SqlParser
-    attr_reader :table_name, :operation, :join_tables
+    attr_reader :table_name, :operation, :join_tables, :invalid
 
-    VALID_OPERATIONS = %{ select insert update delete }
+    VALID_OPERATIONS = %w{ select insert update delete }
     
     def initialize(sql)
       @invalid  = false
@@ -19,7 +19,7 @@ module ActionCost
         end
         @operation = op
       else
-        Rails.logger.error "action_cost: could not parse [#{sql}]"
+        Rails.logger.error "action_cost: could not parse [#{@sql}]"
       end
 
       case @operation

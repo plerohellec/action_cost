@@ -1,35 +1,37 @@
 module ActionCost
   class Middleware
 
-    class << self
-      def start_request(env)
-        @@request_stats = ActionCost::RequestStats.new(env)
-      end
-
-      def end_request
-        @@request_stats.close
-        @@stats_collector.push(@@request_stats)
-        @@request_stats = nil
-      end
-
-      def push_sql_parser(sql_parser)
-        return unless @@request_stats
-        @@request_stats.push(sql_parser)
-      end
-    end
+    attr_reader :request_stats
 
     def initialize(app)
-      puts "action_cost initializing middleware"
       @app = app
-      @@stats_collector = ActionCost::StatsCollector.new
-      @@request_stats = nil
+      @stats_collector = ActionCost::StatsCollector.new
+      @request_stats = nil
+
+      @@singleton = self
     end
 
     def call(env)
-      self.class.start_request(env)
+      start_request(env)
       @app.call(env)
     ensure
-      self.class.end_request
+      end_request
+    end
+    
+    def start_request(env)
+      @request_stats = ActionCost::RequestStats.new(env)
+    end
+
+    def end_request
+      return unless @request_stats
+      @request_stats.close
+      @stats_collector.push(@request_stats)
+      @request_stats = nil
+    end
+
+    def self.push_sql_parser(sql_parser)
+      return unless @@singleton.request_stats
+      @@singleton.request_stats.push(sql_parser)
     end
   end  
 end
