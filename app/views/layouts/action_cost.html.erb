@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Testr3</title>
+  <%= javascript_include_tag :defaults %>
+  <%= csrf_meta_tag %>
+
+  <style>
+    body, td, th {
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 14px }
+    th {
+      text-align: right;
+      font: bold
+    }
+    tr { border-top: 1px solid #444;
+         text-align: right
+       }
+    td { text-align: right }
+  </style>
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

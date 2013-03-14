@@ -50,8 +50,8 @@ module ActionCost
    private
 
     def increment_item(hash, query_type, key)
-      Rails.logger.debug "increment_item: hash=#{hash.inspect}"
-      Rails.logger.debug "increment_item: query_type=#{query_type} key=#{key}"
+#       Rails.logger.debug "increment_item: hash=#{hash.inspect}"
+#       Rails.logger.debug "increment_item: query_type=#{query_type} key=#{key}"
       if hash[query_type].has_key?(key)
         hash[query_type][key] += 1
       else

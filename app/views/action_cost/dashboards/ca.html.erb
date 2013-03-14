@@ -1,0 +1,31 @@
+<h1>RecordCache queries</h1>
+<table width=400px">
+  <tr>
+    <th width=200px>Table</th>
+    <th width=200px>Query count</th>
+  </tr>
+  <% @rc_sorted_table_names.each do |table| %>
+    <tr>
+      <td><%= table %></td>
+      <td><%= @tables[:rc][table]/@num %></td>
+    </tr>
+  <% end %>
+</table>
+<br/>
+
+<h1>SQL queries</h1>
+<table width="400px">
+  <tr>
+    <th width=200px>Table</th>
+    <th width=200px>Query count</th>
+  </tr>
+  <% @sql_sorted_table_names.each do |table| %>
+    <tr>
+      <td><%= table %></td>
+      <td><%= @tables[:sql][table]/@num %></td>
+    </tr>
+  <% end %>
+</table>
+
+<br/>
+<%= link_to 'All controller actions', action_cost_path %>

@@ -1,0 +1,25 @@
+<table width="100%">
+  <tr>
+    <th>Controller Action</th>
+    <th>RecordCache Select</th>
+    <th>SQL Select</th>
+    <th>SQL Update</th>
+    <th>SQL Insert</th>
+    <th>SQL Delete</th>
+    <th>Calls</th>
+  </tr>
+  <% @sorted_cas.each do |ca| %>
+  <% num = @data[ca][:num] %>
+    <tr>
+      <td><%= link_to ca, action_cost_ca_path(URI::escape(ca)) %></td>
+      <td><%= @data[ca][:operations][:rc]['select'] / num %></td>
+      <td><%= @data[ca][:operations][:sql]['select'] / num %></td>
+      <td><%= @data[ca][:operations][:sql]['update'] / num %></td>
+      <td><%= @data[ca][:operations][:sql]['insert'] / num %></td>
+      <td><%= @data[ca][:operations][:sql]['delete'] / num %></td>
+      <td><%= num %></td>
+    </tr>
+  <% end %>
+</table>
+
+<br/>
