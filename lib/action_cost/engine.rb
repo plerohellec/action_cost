@@ -18,6 +18,13 @@ module ActionCost
       end
     end
 
+    initializer 'action_cost:record_cache_hook' do
+      if defined?(::RecordCache::Index)=='constant' && ::RecordCache::Index.class==Class
+        require "#{lib_base_dir}/action_cost/record_cache/index_hook"
+        ::RecordCache::Index.send(:include, ActionCost::RecordCache::IndexHook)
+      end
+    end
+
     initializer "action_cost:instrument_postgresql_adapter" do |app|
       require "#{lib_base_dir}/action_cost/extensions/postgresql_adapter"
     end

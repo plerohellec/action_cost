@@ -1,5 +1,5 @@
 class ActionCost::DashboardsController < ApplicationController
   def index
-    render :text => "This is the dashboard controller"
+    render :json => ActionCost::Middleware.accumulated_stats.to_json
   end
 end

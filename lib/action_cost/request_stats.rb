@@ -9,21 +9,31 @@ module ActionCost
       @controller_name  = request[:controller]
       @action_name      = request[:action]
       
-      @operation_stats  = {}
-      @table_stats      = {}
-      @join_stats       = {}
+      @operation_stats  = { :sql => {}, :rc => {} }
+      ActionCost::SqlParser::VALID_OPERATIONS.each do |op|
+        @operation_stats[:sql][op] = 0
+        @operation_stats[:rc][op] = 0
+      end
+      
+      @table_stats      = { :sql => {}, :rc => {} }
+      @join_stats       = { :sql => {}, :rc => {} }
     end
 
-    def push(sql_parser)
-      sql_parser.parse
-      sql_parser.log
+    def push(parser)
+      parser.parse
+      parser.log
 
-      return if sql_parser.invalid
+      return if parser.invalid
 
-      increment_item(@table_stats,     sql_parser.table_name)
-      increment_item(@operation_stats, sql_parser.operation)
-      sql_parser.join_tables.each do |table|
-        increment_item(@join_stats, join_string(sql_parser.table_name, table))
+      case parser.class.to_s
+      when 'ActionCost::SqlParser'          then query_type = :sql
+      when 'ActionCost::RecordCacheParser'  then query_type = :rc
+      end
+
+      increment_item(@table_stats,     query_type, parser.table_name)
+      increment_item(@operation_stats, query_type, parser.operation)
+      parser.join_tables.each do |table|
+        increment_item(@join_stats, query_type, join_string(parser.table_name, table))
       end
     end
 
@@ -33,28 +43,41 @@ module ActionCost
 
     def log
       Rails.logger.debug "=== ActionCost: #{@controller_name}##{@action_name}"
-      Rails.logger.debug "  Operations:"
-      ActionCost::SqlParser::VALID_OPERATIONS.each do |op|
-        Rails.logger.debug "    #{op}: #{@operation_stats[op]}"
-      end
-      Rails.logger.debug "  Tables:"
-      @table_stats.each_key do |table|
-        Rails.logger.debug "    #{table}: #{@table_stats[table]}"
-      end
+      log_by_query_type(:rc)
+      log_by_query_type(:sql)
     end
 
    private
 
-    def increment_item(hash, key)
-      if hash.has_key?(key)
-        hash[key] += 1
+    def increment_item(hash, query_type, key)
+      Rails.logger.debug "increment_item: hash=#{hash.inspect}"
+      Rails.logger.debug "increment_item: query_type=#{query_type} key=#{key}"
+      if hash[query_type].has_key?(key)
+        hash[query_type][key] += 1
       else
-        hash[key] = 1
+        hash[query_type][key] = 1
       end
     end
 
     def join_string(t1, t2)
       "#{t1}|#{t2}"
+    end
+
+    def log_by_query_type(query_type)
+      Rails.logger.debug "  #{query_type.to_s.upcase}:"
+      Rails.logger.debug "    Operations:"
+      ActionCost::SqlParser::VALID_OPERATIONS.each do |op|
+        log_count(@operation_stats, query_type, op)
+      end
+      Rails.logger.debug "    Tables:"
+      @table_stats[query_type].each_key do |table|
+        log_count(@table_stats, query_type, table)
+      end
+    end
+
+    def log_count(hash, query_type, item)
+      val = hash[query_type][item]
+      Rails.logger.debug "      #{item}: #{hash[query_type][item]}" if val>0
     end
   end
 end
