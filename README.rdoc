@@ -1,19 +1,20 @@
-= action_cost
+= ActionCost
 
-Description goes here.
+ActionCost is a Rails 3 engine implemented as a gem.
+It hooks into ActiveRecord (and RecordCache if used) and counts the number of SQL queries 
+per controller action and per table.
 
-== Contributing to action_cost
- 
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
-* Fork the project.
-* Start a feature/bugfix branch.
-* Commit and push until you are happy with your contribution.
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+== Setup
+Simply include action_cost into your Rails 3 application Gemfile.
+  gem 'action_cost', '0.0.1'
 
-== Copyright
+== Where is the data stored?
+In the Rails process memory. The data goes away when the process dies.
 
-Copyright (c) 2013 Philippe Le Rohellec. See LICENSE.txt for
-further details.
+== Where is the data visible?
+1. Go to http://yourapp/action_cost, it will display a page with a list of controller action and the average number of queries made in each one of them. Click on a controller action to find which tables were queried.
+
+2. After each controller action completes, an action_cost summary is printed in the application logfile at the debug log_level.
+
+
 
