@@ -17,6 +17,11 @@ module ActionCost
       
       @table_stats      = { :sql => {}, :rc => {} }
       @join_stats       = { :sql => {}, :rc => {} }
+      
+      action_cost_logfile = File.open(Rails.root.join("log", 'action_cost.log'), 'a')
+      action_cost_logfile.sync = true
+      @logger = Logger.new(action_cost_logfile)
+      @logger.level = Logger::DEBUG
     end
 
     def push(parser)
@@ -42,7 +47,7 @@ module ActionCost
     end
 
     def log
-      Rails.logger.debug "=== ActionCost: #{@controller_name}##{@action_name}"
+      @logger.debug "=== ActionCost: #{@controller_name}##{@action_name}"
       log_by_query_type(:rc)
       log_by_query_type(:sql)
     end
@@ -64,12 +69,12 @@ module ActionCost
     end
 
     def log_by_query_type(query_type)
-      Rails.logger.debug "  #{query_type.to_s.upcase}:"
-      Rails.logger.debug "    Operations:"
+      @logger.debug "  #{query_type.to_s.upcase}:"
+      @logger.debug "    Operations:"
       ActionCost::SqlParser::VALID_OPERATIONS.each do |op|
         log_count(@operation_stats, query_type, op)
       end
-      Rails.logger.debug "    Tables:"
+      @logger.debug "    Tables:"
       @table_stats[query_type].each_key do |table|
         log_count(@table_stats, query_type, table)
       end
@@ -77,7 +82,7 @@ module ActionCost
 
     def log_count(hash, query_type, item)
       val = hash[query_type][item]
-      Rails.logger.debug "      #{item}: #{hash[query_type][item]}" if val>0
+      @logger.debug "      #{item}: #{hash[query_type][item]}" if val>0
     end
   end
 end
