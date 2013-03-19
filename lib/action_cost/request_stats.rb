@@ -47,6 +47,7 @@ module ActionCost
     end
 
     def log
+      @logger.debug ""
       @logger.debug "=== ActionCost: #{@controller_name}##{@action_name}"
       log_by_query_type(:rc)
       log_by_query_type(:sql)
