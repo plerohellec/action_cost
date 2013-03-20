@@ -8,7 +8,7 @@ per controller action and per table.
 Simply include action_cost into your Rails 3 application Gemfile.
   gem 'action_cost', '0.0.1'
 
-In some applications it's also necessary to add routes in #{Rails.roo}/config/routes.rb for the ActionCost dashboard pages:
+In some applications it's also necessary to add routes in #{Rails.root}/config/routes.rb for the ActionCost dashboard pages:
   namespace :action_cost do
     get '/' => 'dashboards#index'
     match '/ca/:ca' => 'dashboards#ca', :as => 'ca', :constraints => { :ca => /.*/ }
