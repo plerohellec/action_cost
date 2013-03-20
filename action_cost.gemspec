@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
 
-require "asset_sync/version"
+require "action_cost/version"
 
 Gem::Specification.new do |s|
   s.name        = "action_cost"
