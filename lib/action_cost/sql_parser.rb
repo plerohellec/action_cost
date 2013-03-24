@@ -11,15 +11,17 @@ module ActionCost
     end
 
     def parse
-      if @sql =~ /^(\w+)/
+      if @sql =~ /^\s*(\w+)/
         op = $1.downcase
         unless VALID_OPERATIONS.include?(op)
           @invalid = true
-          return
+          return false
         end
         @operation = op
       else
         Rails.logger.error "action_cost: could not parse [#{@sql}]"
+        @invalid = true
+        return false
       end
 
       case @operation
@@ -28,7 +30,8 @@ module ActionCost
       when 'update' then parse_update
       when 'delete' then parse_delete
       end
-        
+
+      return !@invalid
     end
 
     def log

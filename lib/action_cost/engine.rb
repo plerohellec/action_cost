@@ -8,7 +8,9 @@ module ActionCost
 
     config.autoload_paths << lib_base_dir
 
-    paths.app.controllers     = "#{app_base_dir}/controllers/action_cost"
+    if Rails.version =~ /^3.0/
+      paths.app.controllers     = "#{app_base_dir}/controllers/action_cost"
+    end
 
     initializer 'action_cost:include_gauge' do |app|
       puts "action_cost include_gauge"
