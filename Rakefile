@@ -17,9 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "action_cost"
   gem.homepage = "http://github.com/plerohellec/action_cost"
   gem.license = "MIT"
-  gem.summary = %Q{Measure cost of controller action}
-  gem.description = %Q{cost of controller actions}
-  gem.email = "plerohellec@yammer-inc.com"
+  gem.summary = %Q{ActionCost measures the cost of controller action}
+  gem.description = %Q{ActionCost measures the performance of a Rails 3 app controller actions in terms of number of calls to the database and to RecordCache.}
+  gem.email = "philippe@lerohellec.com"
   gem.authors = ["Philippe Le Rohellec"]
   # dependencies defined in Gemfile
 end

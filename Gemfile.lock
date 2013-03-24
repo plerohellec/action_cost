@@ -28,7 +28,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler (~> 1.1.0)
+  bundler (~> 1.0)
   jeweler (~> 1.8.4)
   rcov
   rdoc (~> 3.12)
