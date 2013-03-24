@@ -2,6 +2,7 @@ module ActionCost
   class Middleware
 
     attr_reader :request_stats, :stats_collector
+    cattr_accessor :singleton
 
     def initialize(app)
       @app = app
@@ -29,14 +30,14 @@ module ActionCost
       @request_stats = nil
     end
 
-    def self.push_sql_parser(sql_parser)
-      return unless @@singleton.request_stats
-      @@singleton.request_stats.push(sql_parser)
+    def self.push_sql_parser(parser)
+      return unless singleton.request_stats
+      singleton.request_stats.push(parser)
     end
 
     def self.accumulated_stats
-      return unless @@singleton.stats_collector
-      @@singleton.stats_collector.data
+      return unless singleton.stats_collector
+      singleton.stats_collector.data
     end
   end  
 end
