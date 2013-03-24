@@ -1,24 +1,16 @@
 module ActionCost
-  class Middleware
 
+  # ActionCost data store
+  class Data
     attr_reader :request_stats, :stats_collector
-    cattr_accessor :singleton
-
-    def initialize(app)
-      @app = app
-      @stats_collector = ActionCost::StatsCollector.new
-      @request_stats = nil
-
-      @@singleton = self
-    end
-
-    def call(env)
-      start_request(env)
-      @app.call(env)
-    ensure
-      end_request
-    end
     
+    def initialize
+      # Per process storage
+      @stats_collector = ActionCost::StatsCollector.new
+      # Per HTTP request storage
+      @request_stats = nil
+    end
+
     def start_request(env)
       @request_stats = ActionCost::RequestStats.new(env)
     end
@@ -29,15 +21,43 @@ module ActionCost
       @stats_collector.push(@request_stats)
       @request_stats = nil
     end
+    
+    def push_sql_parser(parser)
+      return unless @request_stats
+      @request_stats.push(parser)
+    end
 
+    def accumulated_stats
+      return unless @stats_collector
+      @stats_collector.data
+    end
+  end
+
+  # Middleware responsability is to initialize and close RequestStats
+  # object at start and end of HTTP query.
+  class Middleware
+
+    def initialize(app)
+      @app = app
+    end
+
+    def self.action_cost_data
+      $action_cost_data
+    end
+
+    def call(env)
+      self.class.action_cost_data.start_request(env)
+      @app.call(env)
+    ensure
+      self.class.action_cost_data.end_request
+    end
+    
     def self.push_sql_parser(parser)
-      return unless singleton.request_stats
-      singleton.request_stats.push(parser)
+      action_cost_data.push_sql_parser(parser)
     end
 
     def self.accumulated_stats
-      return unless singleton.stats_collector
-      singleton.stats_collector.data
+      action_cost_data.accumulated_stats
     end
   end  
 end

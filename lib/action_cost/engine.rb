@@ -1,6 +1,5 @@
 module ActionCost
   class Engine < Rails::Engine
-    puts "action_cost loading engine"
 
     engine_base_dir = File.expand_path("../../..",     __FILE__)
     app_base_dir    = File.expand_path("../../../app", __FILE__)
@@ -8,14 +7,8 @@ module ActionCost
 
     config.autoload_paths << lib_base_dir
 
-    if Rails.version =~ /^3.0/
-      paths.app.controllers     = "#{app_base_dir}/controllers/action_cost"
-    end
-
     initializer 'action_cost:include_gauge' do |app|
-      puts "action_cost include_gauge"
       ActiveSupport.on_load :active_record do
-        puts "action_cost AR loaded"
         include ActionCost::ActiveRecord::Gauge
       end
     end
@@ -33,6 +26,7 @@ module ActionCost
 
     initializer "action_cost.add_middleware" do |app|
       app.middleware.use ActionCost::Middleware
+      $action_cost_data = ActionCost::Data.new
     end
   end
 end

@@ -12,11 +12,12 @@ module ActionCost
     end
 
     def parse
+      return true
     end
 
     def log
       if @invalid
-        Rails.logger.debug "action_cost: sql non parsable query"
+        Rails.logger.debug "action_cost: record cache non parsable query"
       else
         Rails.logger.debug "action_cost: record_cache operation=#{@operation} table_name=#{@table_name} " +
                            "join_tables=#{@join_tables.inspect}"

@@ -5,11 +5,7 @@ module ActionCost
     attr_reader :operation_stats, :table_stats, :join_stats
     
     def initialize(env)
-      if Rails.version =~ /^3.0/
-        request = ActionController::Routing::Routes.recognize_path(env['REQUEST_URI'])
-      else
-        request = Rails.application.routes.recognize_path(env['REQUEST_URI'])
-      end
+      request = Rails.application.routes.recognize_path(env['REQUEST_URI'])
       
       @controller_name  = request[:controller]
       @action_name      = request[:action]

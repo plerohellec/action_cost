@@ -10,14 +10,15 @@ module ActiveRecord
       end
       alias_method_chain :execute, :action_cost
 
-      def exec_query_with_action_cost(sql, name='', binds = [])
-        Rails.logger.debug "exec_query_with_action_cost: #{sql}"
-        parser = ActionCost::SqlParser.new(sql)
-        ActionCost::Middleware.push_sql_parser(parser)
-        exec_query_without_action_cost(sql, name, binds)
+      if Rails.version =~ /^3.[12]\./
+        def exec_query_with_action_cost(sql, name='', binds = [])
+          Rails.logger.debug "exec_query_with_action_cost: #{sql}"
+          parser = ActionCost::SqlParser.new(sql)
+          ActionCost::Middleware.push_sql_parser(parser)
+          exec_query_without_action_cost(sql, name, binds)
+        end
+        alias_method_chain :exec_query, :action_cost
       end
-      alias_method_chain :exec_query, :action_cost
-
     end
   end
 end

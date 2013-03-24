@@ -14,6 +14,7 @@ module ActionCost
       if @sql =~ /^\s*(\w+)/
         op = $1.downcase
         unless VALID_OPERATIONS.include?(op)
+          Rails.logger.error "action_cost: unknown operation [#{op}]"
           @invalid = true
           return false
         end
