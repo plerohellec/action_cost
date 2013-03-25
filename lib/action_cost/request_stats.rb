@@ -5,11 +5,14 @@ module ActionCost
     attr_reader :operation_stats, :table_stats, :join_stats
 
     def initialize(env)
-      unless env['REQUEST_URI'].match(/^\/assets\/.*$/)
+      begin
         request = Rails.application.routes.recognize_path(env['REQUEST_URI'])
 
         @controller_name  = request[:controller]
         @action_name      = request[:action]
+      rescue
+        @controller_name  = nil
+        @action_name      = nil
       end
 
       @operation_stats  = { :sql => {}, :rc => {} }
