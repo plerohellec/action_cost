@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Philippe Le Rohellec"]
-  s.date = "2013-03-24"
+  s.date = "2013-03-25"
   s.description = "ActionCost measures the performance of a Rails 3 app controller actions in terms of number of calls to the database and to RecordCache."
   s.email = "philippe@lerohellec.com"
   s.extra_rdoc_files = [
@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
     "app/views/layouts/action_cost.html.erb",
     "config/routes.rb",
     "lib/action_cost.rb",
-    "lib/action_cost/active_record/gauge.rb",
     "lib/action_cost/engine.rb",
     "lib/action_cost/extensions/postgresql_adapter.rb",
     "lib/action_cost/middleware.rb",
