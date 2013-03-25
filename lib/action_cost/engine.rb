@@ -7,12 +7,6 @@ module ActionCost
 
     config.autoload_paths << lib_base_dir
 
-    initializer 'action_cost:include_gauge' do |app|
-      ActiveSupport.on_load :active_record do
-        include ActionCost::ActiveRecord::Gauge
-      end
-    end
-
     initializer 'action_cost:record_cache_hook' do
       if defined?(::RecordCache::Index)=='constant' && ::RecordCache::Index.class==Class
         require "#{lib_base_dir}/action_cost/record_cache/index_hook"
