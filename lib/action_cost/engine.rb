@@ -14,8 +14,9 @@ module ActionCost
       end
     end
 
-    initializer "action_cost:instrument_postgresql_adapter" do |app|
-      require "#{lib_base_dir}/action_cost/extensions/postgresql_adapter"
+    initializer "action_cost:instrument_adapters" do |app|
+      db_adapter = ActiveRecord::Base.db_adapter
+      require "#{lib_base_dir}/action_cost/extensions/#{db_adapter}_adapter"
     end
 
     initializer "action_cost.add_middleware" do |app|
