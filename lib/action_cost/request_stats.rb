@@ -3,22 +3,27 @@ module ActionCost
 
     attr_reader :controller_name, :action_name
     attr_reader :operation_stats, :table_stats, :join_stats
-    
+
     def initialize(env)
-      request = Rails.application.routes.recognize_path(env['REQUEST_URI'])
-      
-      @controller_name  = request[:controller]
-      @action_name      = request[:action]
-      
+      begin
+        request = Rails.application.routes.recognize_path(env['REQUEST_URI'])
+
+        @controller_name  = request[:controller]
+        @action_name      = request[:action]
+      rescue
+        @controller_name  = nil
+        @action_name      = nil
+      end
+
       @operation_stats  = { :sql => {}, :rc => {} }
       ActionCost::SqlParser::VALID_OPERATIONS.each do |op|
         @operation_stats[:sql][op] = 0
         @operation_stats[:rc][op] = 0
       end
-      
+
       @table_stats      = { :sql => {}, :rc => {} }
       @join_stats       = { :sql => {}, :rc => {} }
-      
+
       action_cost_logfile = File.open(Rails.root.join("log", 'action_cost.log'), 'a')
       action_cost_logfile.sync = true
       @logger = Logger.new(action_cost_logfile)
