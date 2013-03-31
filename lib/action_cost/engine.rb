@@ -15,7 +15,9 @@ module ActionCost
     end
 
     initializer "action_cost:instrument_adapters" do |app|
-      db_adapter = ActiveRecord::Base.db_adapter
+      db_adapter = ActiveRecord::Base.configurations[Rails.env]['adapter']
+      db_adapter = 'sqlite' if db_adapter =='sqlite3'
+      
       require "#{lib_base_dir}/action_cost/extensions/#{db_adapter}_adapter"
     end
 
