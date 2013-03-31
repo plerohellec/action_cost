@@ -47,14 +47,14 @@ module ActionCost
    private
 
     def parse_select
-      if @sql =~ /from "?(\w+)"?\b/i
+      if @sql =~ /from ["`']?(\w+)["`']?\b/i
         @table_name = $1.downcase
       else
         @invalid = true
         return
       end
 
-      @sql.scan(/join "?(\w+)"?\b/i) do |arr|
+      @sql.scan(/join ["`']?(\w+)["`']?\b/i) do |arr|
         arr.each do |t|
           @join_tables << t.downcase
         end
@@ -62,7 +62,7 @@ module ActionCost
     end
 
     def parse_insert
-      if @sql =~ /insert into "?(\w+)"?\b/i
+      if @sql =~ /insert into ["`']?(\w+)["`']?\b/i
         @table_name = $1.downcase
       else
         @invalid = true
@@ -70,7 +70,7 @@ module ActionCost
     end
 
     def parse_update
-      if @sql =~ /^update "?(\w+)"?\b/i
+      if @sql =~ /^update ["`']?(\w+)["`']?\b/i
         @table_name = $1.downcase
       else
         @invalid = true
@@ -78,7 +78,7 @@ module ActionCost
     end
 
     def parse_delete
-      if @sql =~ /^delete from "?(\w+)"?\b/
+      if @sql =~ /^delete from ["`']?(\w+)["`']?\b/
         @table_name = $1.downcase
       else
         @invalid = true
