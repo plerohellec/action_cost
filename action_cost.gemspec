@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "action_cost"
-  s.version = "0.0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Philippe Le Rohellec"]
-  s.date = "2013-03-25"
+  s.date = "2013-03-31"
   s.description = "ActionCost measures the performance of a Rails 3 app controller actions in terms of number of calls to the database and to RecordCache."
   s.email = "philippe@lerohellec.com"
   s.extra_rdoc_files = [
@@ -32,7 +32,9 @@ Gem::Specification.new do |s|
     "config/routes.rb",
     "lib/action_cost.rb",
     "lib/action_cost/engine.rb",
+    "lib/action_cost/extensions/mysql2_adapter.rb",
     "lib/action_cost/extensions/postgresql_adapter.rb",
+    "lib/action_cost/extensions/sqlite_adapter.rb",
     "lib/action_cost/middleware.rb",
     "lib/action_cost/record_cache/index_hook.rb",
     "lib/action_cost/record_cache_parser.rb",
