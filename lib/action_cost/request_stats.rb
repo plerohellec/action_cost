@@ -6,7 +6,8 @@ module ActionCost
 
     def initialize(env)
       begin
-        request = Rails.application.routes.recognize_path(env['REQUEST_URI'])
+        routes_env = { :method => env['REQUEST_METHOD'] }
+        request = Rails.application.routes.recognize_path(env['REQUEST_URI'], routes_env)
 
         @controller_name  = request[:controller]
         @action_name      = request[:action]
